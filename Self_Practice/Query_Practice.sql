@@ -89,3 +89,24 @@ from agents a
 join customers c
 on a.city = c.city
 group by a.agent_id, a.agent_name, a.city;
+
+
+-- 11.	Rank Customers Based on Total Premium Paid (Highest First)
+SELECT 
+    c.customer_id, 
+    c.name,
+    sum(p.premium_amount) as total_premium,
+    rank() over(order by sum(p.premium_amount) desc) as ranked
+from customers c 
+join policies p 
+on c.customer_id = p.customer_id
+group by c.customer_id, c.name;
+
+
+-- 12.	Get Previous and Next Claim Dates for Each Policy.
+select policy_id,
+	   claim_id,
+       claim_date,
+	   lag(claim_date) over(partition by policy_id order by claim_date) as previous_claim,
+       lead(claim_date) over(partition by policy_id order by claim_date) as next_claim
+from claims;
