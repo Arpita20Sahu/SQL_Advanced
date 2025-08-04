@@ -1,3 +1,4 @@
+/*
 Table: Delivery
 
 +-----------------------------+---------+
@@ -50,9 +51,10 @@ The customer id 3 has a first order with delivery id 5 and it is scheduled.
 The customer id 4 has a first order with delivery id 7 and it is immediate.
 Hence, half the customers have immediate first orders.
 
-
-#------------------------------------------------------------------------------------------------------
 # Write your MySQL query statement below
+*/
+
+
 SELECT
     ROUND(
         100.0 * SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) / COUNT(*),
