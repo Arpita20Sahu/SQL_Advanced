@@ -110,3 +110,14 @@ select policy_id,
 	   lag(claim_date) over(partition by policy_id order by claim_date) as previous_claim,
        lead(claim_date) over(partition by policy_id order by claim_date) as next_claim
 from claims;
+
+-- 13.	Identify First Claim Raised Per Customer
+select *
+from 
+(select c.customer_id, c.name, cl.claim_id, cl.claim_date, cl.claim_amount,
+		row_number() over(partition by c.customer_id order by cl.claim_amount) as ranked
+from customers c 
+join policies p on c.customer_id = p.customer_id
+join claims cl on p.policy_id = cl.policy_id
+) A
+where ranked = 1;
